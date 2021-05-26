@@ -1,0 +1,6 @@
+name: Hub
+version: 1.0.0
+author: Naruse
+depend:
+  - ServerManager
+main: fr.naruse.hub.main.HubPlugin
