@@ -16,6 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Optional;
+
 public class InventoryHubs extends AbstractInventory{
     public InventoryHubs(JavaPlugin pl, Player p) {
         super(pl, p, "§2§lHubs", 6*3);
@@ -36,7 +38,16 @@ public class InventoryHubs extends AbstractInventory{
     @Override
     protected void actionPerformed(Player p, ItemStack item, InventoryAction action, int slot) {
         if(item != null){
-
+            Server server = ServerList.getByName(ChatColor.stripColor(item.getItemMeta().getDisplayName()));
+            if(server != null){
+                p.sendMessage("§6Teleportation...");
+                Optional<Server> optional = ServerList.findPlayerProxyServer(p.getName());
+                if(!optional.isPresent()){
+                    p.sendMessage("§cYou should be on a Proxy!");
+                    return;
+                }
+                optional.get().sendPacket(new PacketSwitchServer(server, p.getName()));
+            }
         }
     }
 }
